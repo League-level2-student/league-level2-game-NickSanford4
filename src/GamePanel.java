@@ -5,38 +5,47 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class GamePanel extends JPanel implements KeyListener,ActionListener{
+public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	Timer timer;
 	final int MENU = 0;
 	final int GAME = 1;
 	final int END = 2;
 	int currentState = MENU;
-GamePanel(){
-	timer = new Timer(1000 / 60, this);
-	timer.start();
-}
-void drawMenuState(Graphics g) {
-	g.setColor(Color.BLUE);
-	g.fillRect(0, 0, Maze.WIDTH, Maze.HEIGHT);
-	g.setFont(titleFont);
-	g.setColor(Color.ORANGE);
-	g.drawString("Maze", 300, 150);
-	g.setFont(enter);
-	g.setColor(Color.ORANGE);
-	g.drawString("Press ENTER to Start", 245, 330);
-	g.drawString("Press SPACE for Instructions", 205, 500);
-}
+	ObjectManager om;
+	Character character;
+	GamePanel() {
+		timer = new Timer(1000 / 60, this);
+		timer.start();
+	}
 
-void drawGameState(Graphics g) {
-		
+	void drawMenuState(Graphics g) {
+		g.setColor(Color.BLUE);
+		g.fillRect(0, 0, Maze.WIDTH, Maze.HEIGHT);
+		g.setFont(titleFont);
+		g.setColor(Color.ORANGE);
+		g.drawString("Maze", 300, 150);
+		g.setFont(enter);
+		g.setColor(Color.ORANGE);
+		g.drawString("Press ENTER to Start", 245, 330);
+		g.drawString("Press SPACE for Instructions", 205, 500);
+	}
+
+	void drawGameState(Graphics g) {
+		om.draw(g);
+		if (character.isActive==false) {
+			currentState=END;
 	
-}
+		}
+	}
+	
 
-void drawEndState(Graphics g) {
-	{
+	void drawEndState(Graphics g) {
+
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, Maze.WIDTH, Maze.HEIGHT);
 		g.setFont(titleFont);
@@ -48,20 +57,20 @@ void drawEndState(Graphics g) {
 
 	}
 
-}
-
-@Override
-public void paintComponent(Graphics g) {
-	if (currentState == MENU) {
-		drawMenuState(g);
-	} else if (currentState == GAME) {
-		drawGameState(g);
-	} else if (currentState == END) {
-		drawEndState(g);
+	@Override
+	public void paintComponent(Graphics g) {
+		if (currentState == MENU) {
+			drawMenuState(g);
+		} else if (currentState == GAME) {
+			drawGameState(g);
+		} else if (currentState == END) {
+			drawEndState(g);
+		}
 	}
-}
-Font titleFont = new Font("Arial", Font.BOLD, 70);
-Font enter = new Font("Arial", Font.PLAIN, 30);
+
+	Font titleFont = new Font("Arial", Font.BOLD, 70);
+	Font enter = new Font("Arial", Font.PLAIN, 30);
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -73,18 +82,36 @@ Font enter = new Font("Arial", Font.PLAIN, 30);
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if (currentState == END) {
-			currentState = MENU;
+				currentState = MENU;
+			} else if (currentState == GAME) {
+				currentState = END;
 			}
-			else if (currentState == GAME) {
-			currentState = END;
-			}
-			
+
 			else if (currentState == MENU) {
-			currentState = GAME;
+				currentState = GAME;
 			}
 		}
-			
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if (currentState == MENU) {
+				JOptionPane.showMessageDialog(null, "Use the arrowkeys to navigate through the maze.");
+			}
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			character.up();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			character.down();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			character.left();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			character.right();
+		}
+
 	}
+	
 
 	@Override
 	public void keyReleased(KeyEvent e) {
