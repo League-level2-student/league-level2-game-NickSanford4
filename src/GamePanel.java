@@ -16,8 +16,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 	final int GAME = 1;
 	final int END = 2;
 	int currentState = MENU;
-	ObjectManager om;
-	Character character;
+	Character character = new Character(13,13,20,50);
+	ObjectManager om = new ObjectManager(character);
+	
 	GamePanel() {
 		timer = new Timer(1000 / 60, this);
 		timer.start();

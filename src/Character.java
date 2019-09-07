@@ -37,7 +37,7 @@ public class Character extends GameObject {
 		super(x, y, width, height);
 		speed = 10;
 		if (needImage) {
-		    loadImage ("Standing");
+		    loadImage ("Standing.png");
 		}
 	}
 	void loadImage(String imageFile) {
